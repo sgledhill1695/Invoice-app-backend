@@ -126,9 +126,14 @@ router.put('/:id', async (req, res) => {
             productDescription: req.body.productDescription,
 
         })
+
         .then(invoiceToEdit => {
 
-            res
+            res.status(200).json(deletedInvoice);
+
+
+
+            
 
 
 
@@ -155,6 +160,7 @@ router.delete('/:id', async (req, res) => {
         .then(deletedInvoice => {
 
             res.status(200).json(deletedInvoice);
+
         })
         .catch(err => {
 
@@ -169,5 +175,30 @@ router.delete('/:id', async (req, res) => {
 
     };
 });
+
+//Mark an invoice as complete
+router.put('/complete/:id', async (req, res) => {
+
+    const id = req.params.id;
+
+    try {
+
+        const invoiceToMarkComplete = await Invoice.findByIdAndUpdate(id ,{
+            status: req.body.status
+        })
+
+        .then(invoiceToMarkComplete => {
+            res.status(200).json(invoiceToMarkComplete);
+        })
+        .catch(err => {
+            res.status(500).json('Internal Server Error');
+        });
+
+    }
+    catch {
+        
+        res.status(500).json('Internal Server Error');
+    }
+})
 
 module.exports = router;
