@@ -107,48 +107,35 @@ router.post('/', async (req, res) => {
 //Edit an invoice
 router.put('/:id', async (req, res) => {
 
-    try {
-        
-        const invoiceToEdit = await Invoice.findByIdAndUpdate({
+    const id = req.params.id;
 
-            billFromStreet_address: req.body.billFromStreet_address,
-            billFromCity: req.body.billFromCity,
-            billFromPostCode: req.body.billFromPostCode,
-            billFromCountry: req.body.billFromCountry,
-            billToName: req.body.billToName,
-            billToEmail: req.body.billToEmail,
-            billToStreetAddress: req.body.billToStreetAddress,
-            billToCity: req.body.billToCity,
-            billToPostcode: req.body.billToPostcode,
-            billToCountry: req.body.billToCountry,
-            invoiceDate: req.body.InvoiceDate,
-            paymentTerms: req.body.paymentTerms,
-            productDescription: req.body.productDescription,
+    const invoiceToEdit = await Invoice.findByIdAndUpdate(id, {
 
-        })
+        billFromStreet_address: req.body.billFromStreet_address,
+        billFromCity: req.body.billFromCity,
+        billFromPostCode: req.body.billFromPostCode,
+        billFromCountry: req.body.billFromCountry,
+        billToName: req.body.billToName,
+        billToEmail: req.body.billToEmail,
+        billToStreetAddress: req.body.billToStreetAddress,
+        billToCity: req.body.billToCity,
+        billToPostcode: req.body.billToPostcode,
+        billToCountry: req.body.billToCountry,
+        productDescription: req.body.productDescription,
 
-        .then(invoiceToEdit => {
+    })
 
-            res.status(200).json(deletedInvoice);
+    .then(invoiceToEdit => {
 
+        res.status(200).json(invoiceToEdit);
 
+    })
+    .catch(err => {
 
-            
+        res.status(500).json(err);
 
+    })
 
-
-
-        })
-
-
-
-        //Model.findByIdAndUpdate()
-
-
-    }
-    catch {
-
-    };
 });
 
 //Delete an invoice
