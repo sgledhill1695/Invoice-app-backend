@@ -37,7 +37,6 @@ router.get('/:page/:pageSize/:filters', async (req, res) => {
 
                 .catch(err => {
 
-                    console.log(err);
                     res.status(500).json('Internal Server Error');
 
                 });
@@ -46,7 +45,6 @@ router.get('/:page/:pageSize/:filters', async (req, res) => {
             
         } else {
 
-            console.log(filtersArray)
 
 
             const invoices = await Invoice.find({ status: { $in: filtersArray } })
@@ -56,9 +54,6 @@ router.get('/:page/:pageSize/:filters', async (req, res) => {
 
                     const page = parseInt(req.params.page);
                     const pageSize = parseInt(req.params.pageSize);
-
-                    console.log(page);
-                    console.log(pageSize);
 
                     // Calculate the start and end indexes for the requested page
                     const startIndex = (page - 1) * pageSize;
@@ -70,10 +65,6 @@ router.get('/:page/:pageSize/:filters', async (req, res) => {
                     // Calculate the total number of pages
                     const totalPages = Math.ceil(invoices.length / pageSize);
 
-                    console.log('pag invoices below');
-
-                    console.log(paginatedInvoices);
-
                     // Send the paginated products and total pages as the API response
                     res.status(200).json({ invoices: paginatedInvoices, totalPages });
 
@@ -81,7 +72,6 @@ router.get('/:page/:pageSize/:filters', async (req, res) => {
 
                 .catch(err => {
 
-                    console.log(err);
                     res.status(500).json('Internal Server Error');
 
                 });
@@ -93,14 +83,12 @@ router.get('/:page/:pageSize/:filters', async (req, res) => {
 
     catch(err) {
 
-        console.log(err)
         res.status(500).json(err);
         
 
     }
 
 });
-
 
 //Get single invoice
 router.get('/:id', async (req, res) => {
