@@ -38,6 +38,7 @@ router.get('/:page/:pageSize/:filters', async (req, res) => {
                 .catch(err => {
 
                     res.status(500).json('Internal Server Error');
+                    console.log(err);
 
                 });
 
