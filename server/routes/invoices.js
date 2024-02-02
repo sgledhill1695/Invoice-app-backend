@@ -2,33 +2,105 @@ const express = require('express');
 const router = express.Router();
 const Invoice = require('../models/Invoice');
 
-//Get all invoices
-router.get('/', async (req, res) => {
+//Get all invoices paginated
+router.get('/:page/:pageSize/:filters', async (req, res) => {
 
-    try{
+    //Check if the req contains filters
+    const filters = req.params.filters;
+    const filtersArray = filters.split(',');
 
-        const invoices = await Invoice.find()
-        .then(invoices => {
+    try {
 
-            res.status(200).json(invoices);
+        if (filtersArray[0] === 'null'){
 
-        })
-        .catch( err => {
+            const invoices = await Invoice.find()
 
-            res.status(500).json('Internal Server Error');
+                .then(invoices => {
 
-        });
+                    const page = parseInt(req.params.page);
+                    const pageSize = parseInt(req.params.pageSize);
+
+                    // Calculate the start and end indexes for the requested page
+                    const startIndex = (page - 1) * pageSize;
+                    const endIndex = page * pageSize;
+
+                    // Slice the products array based on the indexes
+                    const paginatedInvoices = invoices.slice(startIndex, endIndex);
+
+                    // Calculate the total number of pages
+                    const totalPages = Math.ceil(invoices.length / pageSize);
+
+                    // Send the paginated products and total pages as the API response
+                    res.status(200).json({ invoices: paginatedInvoices, totalPages });
+
+                })
+
+                .catch(err => {
+
+                    console.log(err);
+                    res.status(500).json('Internal Server Error');
+
+                });
+
+
+            
+        } else {
+
+            console.log(filtersArray)
+
+
+            const invoices = await Invoice.find({ status: { $in: filtersArray } })
+
+                .then(invoices => {
+
+
+                    const page = parseInt(req.params.page);
+                    const pageSize = parseInt(req.params.pageSize);
+
+                    console.log(page);
+                    console.log(pageSize);
+
+                    // Calculate the start and end indexes for the requested page
+                    const startIndex = (page - 1) * pageSize;
+                    const endIndex = page * pageSize;
+
+                    // Slice the products array based on the indexes
+                    const paginatedInvoices = invoices.slice(startIndex, endIndex);
+
+                    // Calculate the total number of pages
+                    const totalPages = Math.ceil(invoices.length / pageSize);
+
+                    console.log('pag invoices below');
+
+                    console.log(paginatedInvoices);
+
+                    // Send the paginated products and total pages as the API response
+                    res.status(200).json({ invoices: paginatedInvoices, totalPages });
+
+                })
+
+                .catch(err => {
+
+                    console.log(err);
+                    res.status(500).json('Internal Server Error');
+
+                });
+
+        }
 
 
     }
 
-    catch{
+    catch(err) {
 
-        res.status(500).json('Internal Server Error');
+        console.log(err)
+        res.status(500).json(err);
+        
 
     }
 
 });
+
 
 //Get single invoice
 router.get('/:id', async (req, res) => {

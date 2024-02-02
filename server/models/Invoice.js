@@ -16,7 +16,7 @@ const invoiceSchema = new Schema({
     billToPostcode: String,
     billToCountry: String,
     invoiceDate: String,
-    paymentTerms: String,
+    paymentTerms: Number,
     productDescription: String,
     dateCreated: {
         type: Date,
