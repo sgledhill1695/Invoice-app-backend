@@ -30,15 +30,16 @@ router.get('/:page/:pageSize/:filters', async (req, res) => {
                     // Calculate the total number of pages
                     const totalPages = Math.ceil(invoices.length / pageSize);
 
+                    const numResults = invoices.length;
+
                     // Send the paginated products and total pages as the API response
-                    res.status(200).json({ invoices: paginatedInvoices, totalPages });
+                    res.status(200).json({ invoices: paginatedInvoices, totalPages, numResults });
 
                 })
 
                 .catch(err => {
 
                     res.status(500).json('Internal Server Error');
-                    console.log(err);
 
                 });
 
@@ -65,6 +66,9 @@ router.get('/:page/:pageSize/:filters', async (req, res) => {
 
                     // Calculate the total number of pages
                     const totalPages = Math.ceil(invoices.length / pageSize);
+
+                    const numResults = invoices.length;
+
 
                     // Send the paginated products and total pages as the API response
                     res.status(200).json({ invoices: paginatedInvoices, totalPages });
